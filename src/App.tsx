@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { getMessagingToken, onMessageListener } from './firebase';
 
 function App() {
+  useEffect(() => {
+    getMessagingToken();
+    const channel = new BroadcastChannel("notifications");
+    channel.addEventListener("message", (event) => {
+      console.log("Receive background: ", event.data);
+    });
+  },[])
+ useEffect(() => {
+   onMessageListener().then(data => {
+      console.log("Receive foreground: ",data)
+   })
+})
   return (
     <div className="App">
       <header className="App-header">
